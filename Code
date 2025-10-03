@@ -1,0 +1,33 @@
+Code:
+from mido import MidiFile
+import pygame.midi
+
+
+mid = MidiFile("rush_e_real.mid") #replace the rush_e_real with the song you put
+
+pygame.midi.init()
+
+PORT_INDEX = 2  # <-- replace 2 with your VirtualMIDISynth #1 OutputDI index
+player = pygame.midi.Output(PORT_INDEX)
+player.set_instrument(0)  
+
+
+note_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 
+              'F#', 'G', 'G#', 'A', 'A#', 'B']
+def note_name(note):
+    return note_names[note % 12] + str(note // 12 - 1)
+
+print("▶ Playing Rush E...")
+
+
+for msg in mid.play():
+    if not msg.is_meta:
+        if msg.type == 'note_on' and msg.velocity > 0:
+            player.note_on(msg.note, msg.velocity)
+            print(f"♪ {note_name(msg.note)}", flush=True)
+        elif msg.type == 'note_off' or (msg.type == 'note_on' and msg.velocity == 0):
+            player.note_off(msg.note, msg.velocity)
+
+
+del player
+pygame.midi.quit()
