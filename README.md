@@ -26,6 +26,7 @@ pip install pygame mido python-rtmidi
 4.Place your .mid file in the project folder.
 
 5.Run this code to find  VirtualMIDISynth #1 Output :
+
 import pygame.midi
 
 pygame.midi.init()
@@ -35,6 +36,5 @@ for i in range(pygame.midi.get_count()):
     direction = "Input" if is_input else "Output"
     print(i, name.decode(), direction)
 pygame.midi.quit()
-
 
 
